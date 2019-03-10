@@ -61,7 +61,7 @@ public class ButtonScript : MonoBehaviour
 
 	void OnDestroy()
 	{
-		X360.onButtonPressed -= OnButtonPressed; // We're about to be destroyed, we don't need to listen to the event anymore
+		X360.onButtonPressed -= OnButtonPressed; // We don't need to listen to the event anymore
 	}
 }
 ```
