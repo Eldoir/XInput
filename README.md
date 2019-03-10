@@ -79,7 +79,7 @@ The screenshot below was taken from the Demo Scene, included in the plugin. You 
 ## Authors
 
 * **[Arthur Cousseau](https://www.linkedin.com/in/arthurcousseau/)**
-* This plugin is "just" a wrapper around [XInputDotNet](https://github.com/speps/XInputDotNet).
+* This plugin is "just" a wrapper around [XInputDotNet](https://github.com/speps/XInputDotNet). However, it does a lot more than that: it provides event-driven programming, and convenient enums.
 
 ## License
 
