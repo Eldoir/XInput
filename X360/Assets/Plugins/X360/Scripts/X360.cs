@@ -3,6 +3,15 @@ using UnityEngine;
 using XInputDotNetPure;
 using X360Internal;
 
+namespace X360Internal
+{
+    public delegate void OnControllerConnected(int playerIndex);
+    public delegate void OnControllerDisconnected(int playerIndex);
+    public delegate void OnButtonPressed(X360.Button button, int playerIndex);
+    public delegate void OnButtonReleased(X360.Button button, int playerIndex);
+    public delegate void OnStickDirectionChanged(X360.Stick stick, X360.Direction direction, int playerIndex);
+}
+
 /// <summary>
 /// <para>Use this class to communicate with the Xbox360 controllers.</para>
 /// <para>All the methods can be passed a playerIndex, to communicate with a specific controller.</para>
@@ -38,33 +47,27 @@ public class X360 : MonoBehaviour
         DownLeft, DownRight
     }
 
-    public delegate void OnControllerConnected(int playerIndex);
-    public delegate void OnControllerDisconnected(int playerIndex);
-    public delegate void OnButtonPressed(Button button, int playerIndex);
-    public delegate void OnButtonReleased(Button button, int playerIndex);
-    public delegate void OnStickDirectionChanged(Stick stick, Direction direction, int playerIndex);
-
     private static X360Controller[] controllers;
     private const int maxControllers = 4;
 
     /// <summary>
-    /// Use this to listen to the <see cref="OnControllerConnected"/> event.
+    /// Use this to listen to the OnControllerConnected event.
     /// </summary>
     public static OnControllerConnected onControllerConnected;
     /// <summary>
-    /// Use this to listen to the <see cref="OnControllerDisconnected"/> event.
+    /// Use this to listen to the OnControllerDisconnected event.
     /// </summary>
     public static OnControllerDisconnected onControllerDisconnected;
     /// <summary>
-    /// Use this to listen to the <see cref="OnButtonPressed"/> event.
+    /// Use this to listen to the OnButtonPressed event.
     /// </summary>
     public static OnButtonPressed onButtonPressed;
     /// <summary>
-    /// Use this to listen to the <see cref="OnButtonReleased"/> event.
+    /// Use this to listen to the OnButtonReleased event.
     /// </summary>
     public static OnButtonReleased onButtonReleased;
     /// <summary>
-    /// Use this to listen to the <see cref="OnStickDirectionChanged"/> event.
+    /// Use this to listen to the OnStickDirectionChanged event.
     /// </summary>
     public static OnStickDirectionChanged onStickDirectionChanged;
 
