@@ -8,10 +8,17 @@ public class ControllerLayout : MonoBehaviour
     private GameObject controllerPrefab;
 
     private GameObject[] controllers;
+    private RectTransform[] rects;
+
+    private int originalWidth;
+    private Vector2 originalScale;
 
 
     void Awake()
     {
+        originalWidth = Screen.width;
+        originalScale = controllerPrefab.GetComponent<RectTransform>().localScale;
+
         CleanChildren();
 
         InstantiateControllers();
@@ -20,6 +27,12 @@ public class ControllerLayout : MonoBehaviour
 
         X360.onControllerConnected += OnControllerConnected;
         X360.onControllerDisconnected += OnControllerDisconnected;
+    }
+
+    private void Update()
+    {
+        UpdateControllersPosition();
+        UpdateControllersScale();
     }
 
     void OnControllerConnected(int playerIndex)
@@ -35,6 +48,7 @@ public class ControllerLayout : MonoBehaviour
     private void InstantiateControllers()
     {
         controllers = new GameObject[4];
+        rects = new RectTransform[4];
 
         for (int i = 0; i < 4; i++)
         {
@@ -46,7 +60,8 @@ public class ControllerLayout : MonoBehaviour
     {
         controllers[i] = Instantiate(controllerPrefab);
         controllers[i].transform.SetParent(transform);
-        controllers[i].GetComponent<RectTransform>().Reset();
+        rects[i] = controllers[i].GetComponent<RectTransform>();
+        rects[i].Reset();
         controllers[i].name = "Controller_" + (i + 1);
         controllers[i].GetComponent<ControllerUI>().SetIndex(i);
     }
@@ -63,7 +78,15 @@ public class ControllerLayout : MonoBehaviour
     {
         for (int i = 0; i < controllers.Length; i++)
         {
-            SetCorner(controllers[i].GetComponent<RectTransform>(), (Corner)i);
+            SetCorner(rects[i], (Corner)i);
+        }
+    }
+
+    private void UpdateControllersScale()
+    {
+        for (int i = 0; i < controllers.Length; i++)
+        {
+            rects[i].localScale = originalScale * (Screen.width / (float)originalWidth);
         }
     }
 
