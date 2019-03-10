@@ -87,4 +87,4 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 
 ## Acknowledgments
 
-* Thanks to [360Controller](https://github.com/360Controller/360Controller/releases), a Mac driver, for providing most of the images used in the demo scene.
+* Thanks to [360Controller](https://github.com/360Controller/360Controller), a macOS driver, for providing most of the images used in the demo scene.
