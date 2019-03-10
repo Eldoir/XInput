@@ -1,21 +1,29 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class DPadScript : MonoBehaviour
+public class DPadScript : InputScript
 {
 
     [SerializeField]
     private DPadDirection[] dPadDirections;
 
 
-    void Update()
+    protected override void InputUpdate()
     {
-        X360.Direction direction = X360.GetDpadDirection();
+        X360.Direction direction = X360.GetDpadDirection(playerIndex);
 
         foreach (DPadDirection dPadDirection in dPadDirections)
         {
             // That way, we only enable the current direction's image
             dPadDirection.EnableImage(dPadDirection.IsConcerned(direction));
+        }
+    }
+
+    protected override void InputReset()
+    {
+        foreach (DPadDirection dPadDirection in dPadDirections)
+        {
+            dPadDirection.EnableImage(false);
         }
     }
 

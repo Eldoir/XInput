@@ -2,6 +2,10 @@
 using UnityEngine;
 using XInputDotNetPure;
 
+/// <summary>
+/// <para>Use this class to communicate with the Xbox360 controllers.</para>
+/// All the methods can be passed a playerIndex, to communicate with a specific controller.
+/// </summary>
 public class X360 : MonoBehaviour
 {
     public enum Button
@@ -32,19 +36,18 @@ public class X360 : MonoBehaviour
         DownLeft, DownRight
     }
 
+    public delegate void OnControllerConnected(int playerIndex);
+    public delegate void OnControllerDisconnected(int playerIndex);
+
     public delegate void OnButtonPressed(Button button);
     public delegate void OnButtonReleased(Button button);
     public delegate void OnStickDirectionChanged(Stick stick, Direction direction);
 
-    private bool playerIndexSet;
-    private PlayerIndex playerIndex;
-    private static GamePadState state;
-    private static GamePadState prevState;
-    private const float detectDirectionThreshold = 0.1f;
-    private const float deadzone = 0.25f;
+    private static X360Controller[] controllers;
+    private const int maxControllers = 4;
 
-    private bool previousLeftStickInDeadZone;
-    private bool previousRightStickInDeadZone;
+    public static OnControllerConnected onControllerConnected;
+    public static OnControllerDisconnected onControllerDisconnected;
 
     public static OnButtonPressed onButtonPressed;
     public static OnButtonReleased onButtonReleased;
@@ -63,41 +66,62 @@ public class X360 : MonoBehaviour
         }
 
         Instance = this;
+
+        InitControllers();
+    }
+
+    void InitControllers()
+    {
+        controllers = new X360Controller[maxControllers];
+
+        for (int i = 0; i < maxControllers; i++)
+        {
+            controllers[i] = new X360Controller(i);
+        }
     }
 
     void Update()
     {
-        FindPlayerIndex();
-
-        prevState = state;
-        state = GamePad.GetState(playerIndex);
-
-        foreach (Button button in System.Enum.GetValues(typeof(Button)))
+        for (int i = 0; i < maxControllers; i++)
         {
-            if (IsButtonPressed(button) && onButtonPressed != null)
-            {
-                onButtonPressed(button);
-            }
-            else if (IsButtonReleased(button) && onButtonReleased != null)
-            {
-                onButtonReleased(button);
-            }
-        }
+            controllers[i].Update();
 
-        if (onStickDirectionChanged != null)
-        {
-            Direction dirLeftStick = StickDirectionChanged(Stick.Left);
-
-            if (dirLeftStick != Direction.None)
+            if (controllers[i].JustConnected() && onControllerConnected != null)
             {
-                onStickDirectionChanged(Stick.Left, dirLeftStick);
+                onControllerConnected(i);
+            }
+            else if (controllers[i].JustDisconnected() && onControllerDisconnected != null)
+            {
+                onControllerDisconnected(i);
             }
 
-            Direction dirRightStick = StickDirectionChanged(Stick.Right);
-
-            if (dirRightStick != Direction.None)
+            foreach (Button button in System.Enum.GetValues(typeof(Button)))
             {
-                onStickDirectionChanged(Stick.Right, dirRightStick);
+                if (IsButtonPressed(button, i) && onButtonPressed != null)
+                {
+                    onButtonPressed(button);
+                }
+                else if (IsButtonReleased(button, i) && onButtonReleased != null)
+                {
+                    onButtonReleased(button);
+                }
+            }
+
+            if (onStickDirectionChanged != null)
+            {
+                Direction dirLeftStick = StickDirectionChanged(Stick.Left, i);
+
+                if (dirLeftStick != Direction.None)
+                {
+                    onStickDirectionChanged(Stick.Left, dirLeftStick);
+                }
+
+                Direction dirRightStick = StickDirectionChanged(Stick.Right);
+
+                if (dirRightStick != Direction.None)
+                {
+                    onStickDirectionChanged(Stick.Right, dirRightStick);
+                }
             }
         }
     }
@@ -105,7 +129,7 @@ public class X360 : MonoBehaviour
     /// <summary>
     /// <paramref name="leftMotor"/> and <paramref name="rightMotor"/> should be between 0 and 1.
     /// </summary>
-    public static void SetVibration(int playerIndex, float leftMotor, float rightMotor)
+    public static void SetVibration(float leftMotor, float rightMotor, int playerIndex = 0)
     {
         GamePad.SetVibration((PlayerIndex)playerIndex, leftMotor, rightMotor);
     }
@@ -113,7 +137,7 @@ public class X360 : MonoBehaviour
     /// <summary>
     /// Resets the vibration for all controllers.
     /// </summary>
-    public static void ResetVibration()
+    public static void ResetAllVibrations()
     {
         foreach (var playerIndex in System.Enum.GetValues(typeof(PlayerIndex)))
         {
@@ -124,7 +148,7 @@ public class X360 : MonoBehaviour
     /// <summary>
     /// Resets the vibration for the controller with the given <paramref name="playerIndex"/>.
     /// </summary>
-    public static void ResetVibration(int playerIndex)
+    public static void ResetVibration(int playerIndex = 0)
     {
         ResetVibration((PlayerIndex)playerIndex);
     }
@@ -132,227 +156,89 @@ public class X360 : MonoBehaviour
     /// <summary>
     /// Resets the vibration for the controller with the given <paramref name="playerIndex"/>.
     /// </summary>
-    public static void ResetVibration(PlayerIndex playerIndex)
+    public static void ResetVibration(PlayerIndex playerIndex = PlayerIndex.One)
     {
         GamePad.SetVibration(playerIndex, 0, 0);
     }
 
     /// <summary>
-    /// Returns a normalized direction vector for the given <paramref name="stick"/>.
+    /// Returns true if the controller was connected this frame.
     /// </summary>
-    public static Vector2 GetStickDirection(Stick stick)
+    public static bool ControllerConnected(int playerIndex = 0)
     {
-        if (stick == Stick.Left)
-        {
-            return new Vector2(state.ThumbSticks.Left.X, state.ThumbSticks.Left.Y);
-        }
-        else if (stick == Stick.Right)
-        {
-            return new Vector2(state.ThumbSticks.Right.X, state.ThumbSticks.Right.Y);
-        }
-
-        return Vector2.zero;
+        return controllers[playerIndex].JustConnected();
     }
 
     /// <summary>
-    /// Returns <see cref="Direction.None"/> if no dpad button is currently hold.
+    /// Returns true if the controller was disconnected this frame.
     /// </summary>
-    public static Direction GetDpadDirection()
+    public static bool ControllerDisconnected(int playerIndex = 0)
     {
-        if (IsButtonHold(Button.DPadUp))
-        {
-            if (IsButtonHold(Button.DPadLeft)) return Direction.UpLeft;
-            else if (IsButtonHold(Button.DPadRight)) return Direction.UpRight;
-            else return Direction.Up;
-        }
-        else if (IsButtonHold(Button.DPadDown))
-        {
-            if (IsButtonHold(Button.DPadLeft)) return Direction.DownLeft;
-            else if (IsButtonHold(Button.DPadRight)) return Direction.DownRight;
-            else return Direction.Down;
-        }
-        else if (IsButtonHold(Button.DPadLeft))
-        {
-            return Direction.Left;
-        }
-        else if (IsButtonHold(Button.DPadRight))
-        {
-            return Direction.Right;
-        }
+        return controllers[playerIndex].JustDisconnected();
+    }
 
-        return Direction.None;
+    /// <summary>
+    /// Returns a normalized direction vector for the given <paramref name="stick"/>.
+    /// </summary>
+    public static Vector2 GetStickDirection(Stick stick, int playerIndex = 0)
+    {
+        return controllers[playerIndex].GetStickDirection(stick);
+    }
+
+    /// <summary>
+    /// Returns <see cref="Direction.None"/> if no DPad button is currently hold.
+    /// </summary>
+    public static Direction GetDpadDirection(int playerIndex = 0)
+    {
+        return controllers[playerIndex].GetDpadDirection();
     }
 
     /// <summary>
     /// Returns the value of the given <paramref name="trigger"/>, between 0 and 1.
     /// </summary>
-    public static float GetTriggerValue(Trigger trigger)
+    public static float GetTriggerValue(Trigger trigger, int playerIndex = 0)
     {
-        if (trigger == Trigger.Left)
-        {
-            return state.Triggers.Left;
-        }
-        else if (trigger == Trigger.Right)
-        {
-            return state.Triggers.Right;
-        }
-
-        return 0f;
+        return controllers[playerIndex].GetTriggerValue(trigger);
     }
 
     /// <summary>
     /// Returns <see cref="Direction.None"/> if the direction has not changed.
     /// </summary>
-    public static Direction StickDirectionChanged(Stick stick)
+    public static Direction StickDirectionChanged(Stick stick, int playerIndex = 0)
     {
-        if (StickInDeadZone(prevState, stick) && !StickInDeadZone(state, stick))
-        {
-            float deltaX = 0, deltaY = 0;
-
-            if (stick == Stick.Left)
-            {
-                deltaX = state.ThumbSticks.Left.X - prevState.ThumbSticks.Left.X;
-                deltaY = state.ThumbSticks.Left.Y - prevState.ThumbSticks.Left.Y;
-            }
-            else if (stick == Stick.Right)
-            {
-                deltaX = state.ThumbSticks.Right.X - prevState.ThumbSticks.Right.X;
-                deltaY = state.ThumbSticks.Right.Y - prevState.ThumbSticks.Right.Y;
-            }
-
-            if (Mathf.Abs(deltaX) < detectDirectionThreshold && Mathf.Abs(deltaY) > detectDirectionThreshold) // Vertical
-            {
-                return deltaY > 0 ? Direction.Up : Direction.Down;
-            }
-            else if (Mathf.Abs(deltaX) > detectDirectionThreshold && Mathf.Abs(deltaY) < detectDirectionThreshold) // Horizontal
-            {
-                return deltaX > 0 ? Direction.Right : Direction.Left;
-            }
-            else if (deltaX > detectDirectionThreshold)
-            {
-                if (deltaY > detectDirectionThreshold)
-                {
-                    return Direction.UpRight;
-                }
-                else if (deltaY < detectDirectionThreshold)
-                {
-                    return Direction.DownRight;
-                }
-            }
-            else if (deltaX < detectDirectionThreshold)
-            {
-                if (deltaY > detectDirectionThreshold)
-                {
-                    return Direction.UpLeft;
-                }
-                else if (deltaY < detectDirectionThreshold)
-                {
-                    return Direction.DownLeft;
-                }
-            }
-        }
-
-        return Direction.None;
+        return controllers[playerIndex].StickDirectionChanged(stick);
     }
 
-    private static bool StickInDeadZone(GamePadState state, Stick stick)
+    /// <summary>
+    /// Returns whether the given <paramref name="stick"/> is in the dead zone.
+    /// </summary>
+    public static bool StickInDeadZone(Stick stick, int playerIndex = 0)
     {
-        Vector2 stickDir = Vector2.zero;
-
-        if (stick == Stick.Left)
-        {
-            stickDir = new Vector2(state.ThumbSticks.Left.X, state.ThumbSticks.Left.Y);
-        }
-        else if (stick == Stick.Right)
-        {
-            stickDir = new Vector2(state.ThumbSticks.Right.X, state.ThumbSticks.Right.Y);
-        }
-
-        return stickDir.magnitude < deadzone;
+        return controllers[playerIndex].StickInDeadZone(stick);
     }
 
     /// <summary>
     /// Returns true if the button is being hold this frame.
     /// </summary>
-    public static bool IsButtonHold(Button button)
+    public static bool IsButtonHold(Button button, int playerIndex = 0)
     {
-        return IsButtonPressedOrReleased(button, ButtonState.Pressed, ButtonState.Pressed);
+        return controllers[playerIndex].IsButtonHold(button);
     }
 
     /// <summary>
     /// Returns true if the button was pressed this frame.
     /// </summary>
-    public static bool IsButtonPressed(Button button)
+    public static bool IsButtonPressed(Button button, int playerIndex = 0)
     {
-        return IsButtonPressedOrReleased(button, ButtonState.Released, ButtonState.Pressed);
+        return controllers[playerIndex].IsButtonPressed(button);
     }
 
     /// <summary>
     /// Returns true if the button was released this frame.
     /// </summary>
-    public static bool IsButtonReleased(Button button)
+    public static bool IsButtonReleased(Button button, int playerIndex = 0)
     {
-        return IsButtonPressedOrReleased(button, ButtonState.Pressed, ButtonState.Released);
-    }
-
-    private static bool IsButtonPressedOrReleased(Button button, ButtonState prevButtonState, ButtonState buttonState)
-    {
-        switch (button)
-        {
-            case Button.A:
-                return prevState.Buttons.A == prevButtonState && state.Buttons.A == buttonState;
-            case Button.B:
-                return prevState.Buttons.B == prevButtonState && state.Buttons.B == buttonState;
-            case Button.Back:
-                return prevState.Buttons.Back == prevButtonState && state.Buttons.Back == buttonState;
-            case Button.Guide:
-                return prevState.Buttons.Guide == prevButtonState && state.Buttons.Guide == buttonState;
-            case Button.LeftShoulder:
-                return prevState.Buttons.LeftShoulder == prevButtonState && state.Buttons.LeftShoulder == buttonState;
-            case Button.LeftStick:
-                return prevState.Buttons.LeftStick == prevButtonState && state.Buttons.LeftStick == buttonState;
-            case Button.RightShoulder:
-                return prevState.Buttons.RightShoulder == prevButtonState && state.Buttons.RightShoulder == buttonState;
-            case Button.RightStick:
-                return prevState.Buttons.RightStick == prevButtonState && state.Buttons.RightStick == buttonState;
-            case Button.Start:
-                return prevState.Buttons.Start == prevButtonState && state.Buttons.Start == buttonState;
-            case Button.X:
-                return prevState.Buttons.X == prevButtonState && state.Buttons.X == buttonState;
-            case Button.Y:
-                return prevState.Buttons.Y == prevButtonState && state.Buttons.Y == buttonState;
-            case Button.DPadUp:
-                return prevState.DPad.Up == prevButtonState && state.DPad.Up == buttonState;
-            case Button.DPadDown:
-                return prevState.DPad.Down == prevButtonState && state.DPad.Down == buttonState;
-            case Button.DPadLeft:
-                return prevState.DPad.Left == prevButtonState && state.DPad.Left == buttonState;
-            case Button.DPadRight:
-                return prevState.DPad.Right == prevButtonState && state.DPad.Right == buttonState;
-            default:
-                return false;
-        }
-    }
-
-    private void FindPlayerIndex()
-    {
-        // Find a PlayerIndex, for a single player game
-        // Will find the first controller that is connected and use it
-        if (!playerIndexSet || !prevState.IsConnected)
-        {
-            for (int i = 0; i < 4; ++i)
-            {
-                PlayerIndex testPlayerIndex = (PlayerIndex)i;
-                GamePadState testState = GamePad.GetState(testPlayerIndex);
-                if (testState.IsConnected)
-                {
-                    Debug.Log(string.Format("GamePad found {0}", testPlayerIndex));
-                    playerIndex = testPlayerIndex;
-                    playerIndexSet = true;
-                }
-            }
-        }
-
+        return controllers[playerIndex].IsButtonReleased(button);
     }
 }
 #endif

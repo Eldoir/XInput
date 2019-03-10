@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class TriggerScript : MonoBehaviour
+public class TriggerScript : InputScript
 {
 
     [SerializeField]
@@ -16,18 +16,22 @@ public class TriggerScript : MonoBehaviour
     private const float maxFillAmount = 0.88f; // Because the sprite shouldn't be completely filled
 
 
-    void FixedUpdate()
+    protected override void InputUpdate()
     {
+        float triggerValue = X360.GetTriggerValue(trigger, playerIndex);
+
         // Set a vibration when we hit the maximum trigger value
-        if (!isVibrating && X360.GetTriggerValue(trigger) == 1f)
+        if (!isVibrating && triggerValue == 1f)
         {
             StartCoroutine(SetVibration(1f, 0.5f));
         }
+
+        fillImage.fillAmount = triggerValue * maxFillAmount;
     }
 
-    void Update()
+    protected override void InputReset()
     {
-        fillImage.fillAmount = X360.GetTriggerValue(trigger) * maxFillAmount;
+        fillImage.fillAmount = 0;
     }
 
     /// <summary>
@@ -44,24 +48,24 @@ public class TriggerScript : MonoBehaviour
         {
             if (trigger == X360.Trigger.Left)
             {
-                X360.SetVibration(0, vibration, 0);
+                X360.SetVibration(vibration, 0, playerIndex);
             }
             else if (trigger == X360.Trigger.Right)
             {
-                X360.SetVibration(0, 0, vibration);
+                X360.SetVibration(0, vibration, playerIndex);
             }
 
             elapsedTime += Time.deltaTime;
             yield return wait;
         }
 
-        X360.ResetVibration(0);
+        X360.ResetVibration(playerIndex);
 
         isVibrating = false;
     }
 
     private void OnApplicationQuit()
     {
-        X360.ResetVibration();
+        X360.ResetAllVibrations();
     }
 }

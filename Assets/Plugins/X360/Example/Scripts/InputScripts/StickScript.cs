@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class StickScript : MonoBehaviour
+public class StickScript : InputScript
 {
 
     [SerializeField]
@@ -21,15 +21,22 @@ public class StickScript : MonoBehaviour
     private const float amplitude = 15f;
 
 
-    void Start()
+    void Awake()
     {
         originalPosition = rectTransform.anchoredPosition;
     }
 
-    void Update()
+    protected override void InputUpdate()
     {
-        rectTransform.anchoredPosition = originalPosition + amplitude * X360.GetStickDirection(stick);
+        rectTransform.anchoredPosition = originalPosition + amplitude * X360.GetStickDirection(stick, playerIndex);
 
-        pressedImg.enabled = X360.IsButtonHold(button);
+        pressedImg.enabled = X360.IsButtonHold(button, playerIndex);
+    }
+
+    protected override void InputReset()
+    {
+        rectTransform.anchoredPosition = originalPosition;
+
+        pressedImg.enabled = false;
     }
 }

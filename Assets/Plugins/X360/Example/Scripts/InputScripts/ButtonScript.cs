@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class ButtonScript : MonoBehaviour
+public class ButtonScript : InputScript
 {
 
     [SerializeField]
@@ -17,8 +17,13 @@ public class ButtonScript : MonoBehaviour
     private Sprite pressedSprite;
 
 
-    void Update()
+    protected override void InputUpdate()
     {
-        imgComponent.sprite = X360.IsButtonHold(button) ? pressedSprite : normalSprite;
+        imgComponent.sprite = X360.IsButtonHold(button, playerIndex) ? pressedSprite : normalSprite;
+    }
+
+    protected override void InputReset()
+    {
+        imgComponent.sprite = normalSprite;
     }
 }
