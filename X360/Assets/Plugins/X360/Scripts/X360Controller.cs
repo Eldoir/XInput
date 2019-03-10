@@ -25,6 +25,11 @@ public class X360Controller
         state = GamePad.GetState(playerIndex);
     }
 
+    public bool IsConnected()
+    {
+        return state.IsConnected;
+    }
+
     public bool JustConnected()
     {
         return state.IsConnected && !prevState.IsConnected;

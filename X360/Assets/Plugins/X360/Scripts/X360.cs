@@ -4,7 +4,8 @@ using XInputDotNetPure;
 
 /// <summary>
 /// <para>Use this class to communicate with the Xbox360 controllers.</para>
-/// All the methods can be passed a playerIndex, to communicate with a specific controller.
+/// <para>All the methods can be passed a playerIndex, to communicate with a specific controller.</para>
+/// <para>Player 1 has playerIndex 0, Player 2 has playerIndex 1, and so on.</para>
 /// </summary>
 public class X360 : MonoBehaviour
 {
@@ -38,7 +39,6 @@ public class X360 : MonoBehaviour
 
     public delegate void OnControllerConnected(int playerIndex);
     public delegate void OnControllerDisconnected(int playerIndex);
-
     public delegate void OnButtonPressed(Button button, int playerIndex);
     public delegate void OnButtonReleased(Button button, int playerIndex);
     public delegate void OnStickDirectionChanged(Stick stick, Direction direction, int playerIndex);
@@ -46,11 +46,25 @@ public class X360 : MonoBehaviour
     private static X360Controller[] controllers;
     private const int maxControllers = 4;
 
+    /// <summary>
+    /// Use this to listen to the <see cref="OnControllerConnected"/> event.
+    /// </summary>
     public static OnControllerConnected onControllerConnected;
+    /// <summary>
+    /// Use this to listen to the <see cref="OnControllerDisconnected"/> event.
+    /// </summary>
     public static OnControllerDisconnected onControllerDisconnected;
-
+    /// <summary>
+    /// Use this to listen to the <see cref="OnButtonPressed"/> event.
+    /// </summary>
     public static OnButtonPressed onButtonPressed;
+    /// <summary>
+    /// Use this to listen to the <see cref="OnButtonReleased"/> event.
+    /// </summary>
     public static OnButtonReleased onButtonReleased;
+    /// <summary>
+    /// Use this to listen to the <see cref="OnStickDirectionChanged"/> event.
+    /// </summary>
     public static OnStickDirectionChanged onStickDirectionChanged;
 
     private static X360 Instance;
@@ -159,6 +173,14 @@ public class X360 : MonoBehaviour
     public static void ResetVibration(PlayerIndex playerIndex = PlayerIndex.One)
     {
         GamePad.SetVibration(playerIndex, 0, 0);
+    }
+
+    /// <summary>
+    /// Returns true if the controller is currently connected.
+    /// </summary>
+    public static bool IsControllerConnected(int playerIndex = 0)
+    {
+        return controllers[playerIndex].IsConnected();
     }
 
     /// <summary>
