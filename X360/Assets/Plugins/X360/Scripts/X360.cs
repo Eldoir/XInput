@@ -39,9 +39,9 @@ public class X360 : MonoBehaviour
     public delegate void OnControllerConnected(int playerIndex);
     public delegate void OnControllerDisconnected(int playerIndex);
 
-    public delegate void OnButtonPressed(Button button);
-    public delegate void OnButtonReleased(Button button);
-    public delegate void OnStickDirectionChanged(Stick stick, Direction direction);
+    public delegate void OnButtonPressed(Button button, int playerIndex);
+    public delegate void OnButtonReleased(Button button, int playerIndex);
+    public delegate void OnStickDirectionChanged(Stick stick, Direction direction, int playerIndex);
 
     private static X360Controller[] controllers;
     private const int maxControllers = 4;
@@ -99,11 +99,11 @@ public class X360 : MonoBehaviour
             {
                 if (IsButtonPressed(button, i) && onButtonPressed != null)
                 {
-                    onButtonPressed(button);
+                    onButtonPressed(button, i);
                 }
                 else if (IsButtonReleased(button, i) && onButtonReleased != null)
                 {
-                    onButtonReleased(button);
+                    onButtonReleased(button, i);
                 }
             }
 
@@ -113,14 +113,14 @@ public class X360 : MonoBehaviour
 
                 if (dirLeftStick != Direction.None)
                 {
-                    onStickDirectionChanged(Stick.Left, dirLeftStick);
+                    onStickDirectionChanged(Stick.Left, dirLeftStick, i);
                 }
 
                 Direction dirRightStick = StickDirectionChanged(Stick.Right);
 
                 if (dirRightStick != Direction.None)
                 {
-                    onStickDirectionChanged(Stick.Right, dirRightStick);
+                    onStickDirectionChanged(Stick.Right, dirRightStick, i);
                 }
             }
         }
