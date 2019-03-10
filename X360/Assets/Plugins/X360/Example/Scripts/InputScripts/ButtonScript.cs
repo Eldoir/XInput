@@ -48,7 +48,7 @@ public class ButtonScript : InputScript
 
     private void OnDestroy()
     {
-        X360.onButtonPressed -= OnButtonPressed; // We're about to be destroyed, we don't need to listen the event anymore
+        X360.onButtonPressed -= OnButtonPressed; // We're about to be destroyed, we don't need to listen to the event anymore
         X360.onButtonReleased -= OnButtonReleased;
     }
 }
