@@ -68,6 +68,8 @@ public class ButtonScript : MonoBehaviour
 
 ## Screenshots
 
+The screenshot below was taken from the Demo Scene, included in the plugin. You can plug in multiple controllers and see their model update when you press buttons!
+
 ![Demo Scene](Screenshots/DemoScene.png)
 
 ## Notes
