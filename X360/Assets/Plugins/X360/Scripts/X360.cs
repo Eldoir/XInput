@@ -1,6 +1,7 @@
 ﻿#if UNITY_EDITOR || UNITY_STANDALONE
 using UnityEngine;
 using XInputDotNetPure;
+using X360Internal;
 
 /// <summary>
 /// <para>Use this class to communicate with the Xbox360 controllers.</para>
