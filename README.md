@@ -526,7 +526,7 @@ The screenshot below was taken from the Demo Scene, included in the plugin. You 
 
 ## Notes
 
-* Last tested with [Unity 2018.3.8f1](https://unity3d.com/unity/whats-new/2018.3.8).
+* Last tested with [Unity 2018.3.9f1](https://unity3d.com/unity/whats-new/2018.3.9), from 18 March 2019.
 * XInput uses a radial method for its deadzone. See [this](http://www.third-helix.com/2013/04/12/doing-thumbstick-dead-zones-right.html) fantastic article to read more about the different deadzone methods.
 
 ## Authors
