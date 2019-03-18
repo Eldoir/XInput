@@ -1,41 +1,451 @@
-# X360
+# XInput
 
-Ever wondered how to handle Xbox 360 controllers very easily? Well, there you go!
+Ever wondered how to handle **Xbox 360** and **Xbox One** controllers very easily? Well, there you go!
 
-X360 gets rid of all the complicated code so that you can focus on the essentials: interaction!
+XInput gets rid of all the complicated code so that you can focus on the essentials: interaction!
 
-See [Code Usage](#code-usage) for some examples.
+See [Examples](#examples) to find out what XInput is capable of.
 
 ## Getting Started
 
-For a quick import into an existing project, just get the [UnityPackage](X360Package.unitypackage).
+For a quick import into an existing project, just get the [UnityPackage](XInputPackage.unitypackage).
 
-The X360 folder is an empty project with only the plugin imported and some examples! :)
+If you want to test the UnityPackage in an empty project, that's what the XInput folder is! :)
 
-## Prerequisites
+To get it working, just go into GameObject -> Input -> XInput. It will create a new GameObject in your scene, named "XInput" and with the XInput script on it. You're good to go!
 
-There are absolutely no prerequisites to this plugin.
+![How to](Screenshots/HowTo.png)
 
-Everything comes into a few files (and most of them are used for demo).
+## Examples
 
-## Code Usage
+Here are some examples of what you can do with XInput:
 
-You can get information from the controllers in 2 ways :
-- The first, simplest, is to call methods directly, in Update() for example.
+### Controllers
+
+<details>
+<summary>Know if a controller is connected</summary>
+
+```csharp
+public class ExampleScript : MonoBehaviour
+{
+	void Update()
+	{
+		// Player 1 is connected
+		if (XInput.IsControllerConnected())
+		{
+
+		}
+	}
+}
+```
+</details>
+
+<details>
+<summary>Know if a controller just connected</summary>
+
+```csharp
+public class ExampleScript : MonoBehaviour
+{
+	void Update()
+	{
+		// Player 1 just connected this frame
+		if (XInput.ControllerConnected())
+		{
+
+		}
+	}
+}
+```
+</details>
+
+<details>
+<summary>Know if a controller just disconnected</summary>
+
+```csharp
+public class ExampleScript : MonoBehaviour
+{
+	void Update()
+	{
+		// Player 1 just disconnected this frame
+		if (XInput.ControllerDisconnected())
+		{
+
+		}
+	}
+}
+```
+</details>
+
+### Buttons
+
+<details>
+<summary>Know if a button is being hold</summary>
+
+```csharp
+public class ExampleScript : MonoBehaviour
+{
+	void Update()
+	{
+		// Player 1 is holding A
+		if (XInput.ButtonHold(XInput.Button.A))
+		{
+
+		}
+	}
+}
+```
+</details>
+
+<details>
+<summary>Know if a button was pressed</summary>
+
+```csharp
+public class ExampleScript : MonoBehaviour
+{
+	void Update()
+	{
+		// Player 1 just pressed A this frame
+		if (XInput.ButtonPressed(XInput.Button.A))
+		{
+
+		}
+	}
+}
+```
+</details>
+
+<details>
+<summary>Know if a button was released</summary>
+
+```csharp
+public class ExampleScript : MonoBehaviour
+{
+	void Update()
+	{
+		// Player 1 just released A this frame
+		if (XInput.ButtonReleased(XInput.Button.A))
+		{
+
+		}
+	}
+}
+```
+</details>
+
+### Sticks
+
+<details>
+<summary>Get the direction of a stick</summary>
+
+```csharp
+public class ExampleScript : MonoBehaviour
+{
+	void Update()
+	{
+		// Get the direction of Player 1 Left Stick as a Vector2
+		Debug.Log(XInput.GetStickDirection(XInput.Stick.Left));
+	}
+}
+```
+</details>
+
+<details>
+<summary>Know if a stick's direction has changed</summary>
+
+```csharp
+public class ExampleScript : MonoBehaviour
+{
+	void Update()
+	{
+		// Player 1 just moved her Left Stick in the Up direction
+		if (XInput.StickDirectionChanged(Stick.Left) == XInput.Direction.Up)
+		{
+
+		}
+	}
+}
+```
+</details>
+
+<details>
+<summary>Know if a stick was released</summary>
+
+```csharp
+public class ExampleScript : MonoBehaviour
+{
+	void Update()
+	{
+		// Player 1 just released her Left Stick
+		if (XInput.StickReleased(XInput.Stick.Left))
+		{
+
+		}
+	}
+}
+```
+</details>
+
+<details>
+<summary>Know if a stick is in the deadzone</summary>
+
+```csharp
+public class ExampleScript : MonoBehaviour
+{
+	void Update()
+	{
+		// Player 1 has her Left Stick in the deadzone
+		if (XInput.StickInDeadZone(Stick.Left))
+		{
+
+		}
+	}
+}
+```
+</details>
+
+<details>
+<summary>Set a new radius to use to determine whether a stick is in the deadzone</summary>
+
+```csharp
+public class ExampleScript : MonoBehaviour
+{
+	void Start()
+	{
+		// The new radius must be between [0-1]. If it's out of bounds, it will be clamped anyway.
+		XInput.SetDeadZoneRadius(0.2f);
+	}
+}
+```
+</details>
+
+### Triggers
+
+<details>
+<summary>Get the value of a trigger (between [0-1])</summary>
+
+```csharp
+public class ExampleScript : MonoBehaviour
+{
+	void Update()
+	{
+		// Get the Left Trigger value for Player 1
+		Debug.Log(XInput.GetTriggerValue(XInput.Trigger.Left));
+	}
+}
+```
+</details>
+
+<details>
+<summary>Know if a trigger was pressed</summary>
+
+```csharp
+public class ExampleScript : MonoBehaviour
+{
+	void Update()
+	{
+		// Player 1 just pressed her Left Trigger this frame
+		if (XInput.IsTriggerPressed(XInput.Trigger.Left))
+		{
+
+		}
+	}
+}
+```
+</details>
+
+<details>
+<summary>Know if a trigger was released</summary>
+
+```csharp
+public class ExampleScript : MonoBehaviour
+{
+	void Update()
+	{
+		// Player 1 just released her Left Trigger this frame
+		if (XInput.IsTriggerReleased(XInput.Trigger.Left))
+		{
+
+		}
+	}
+}
+```
+</details>
+
+<details>
+<summary>Set a new value to use to determine whether a trigger was pressed or released</summary>
+
+```csharp
+public class ExampleScript : MonoBehaviour
+{
+	void Start()
+	{
+		// The new value must be between [0-1]. If it's out of bounds, it will be clamped anyway.
+		XInput.SetTriggerMinValueToConsiderPressedOrReleased(0.9f);
+	}
+}
+```
+</details>
+
+### DPad
+
+<details>
+<summary>Get the DPad direction</summary>
+
+```csharp
+public class ExampleScript : MonoBehaviour
+{
+	void Update()
+	{
+		// Player 1 is holding Up on her DPad
+		if (XInput.GetDPadDirection() == XInput.Direction.Up)
+		{
+
+		}
+	}
+}
+```
+</details>
+
+<details>
+<summary>Know if the DPad direction has changed</summary>
+
+```csharp
+public class ExampleScript : MonoBehaviour
+{
+	void Update()
+	{
+		// Player 1 just moved her DPad in the Up direction
+		if (XInput.DPadDirectionChanged() == XInput.Direction.Up)
+		{
+
+		}
+	}
+}
+```
+</details>
+
+<details>
+<summary>Know if the DPad was released</summary>
+
+```csharp
+public class ExampleScript : MonoBehaviour
+{
+	void Update()
+	{
+		// Player 1 just released her DPad
+		if (XInput.DPadReleased())
+		{
+
+		}
+	}
+}
+```
+</details>
+
+### Vibration
+
+<details>
+<summary>Set a vibration on both triggers</summary>
+
+```csharp
+public class ExampleScript : MonoBehaviour
+{
+	void Update()
+	{
+		if (somethingHappened)
+		{
+			// Set a vibration on Player 1 Left and Right Triggers, with power 50% for 1s
+			XInput.SetVibration(0.5f, 1f);
+		}
+	}
+}
+```
+</details>
+
+<details>
+<summary>Set a vibration on a specific trigger</summary>
+
+```csharp
+public class ExampleScript : MonoBehaviour
+{
+	void Update()
+	{
+		if (somethingHappened)
+		{
+			// Set a vibration on Player 1 Left Trigger, with power 50% for 1s
+			XInput.SetVibration(XInput.Trigger.Left, 0.5f, 1f);
+		}
+	}
+}
+```
+</details>
+
+<details>
+<summary>Stop the vibration for all controllers</summary>
+
+```csharp
+public class ExampleScript : MonoBehaviour
+{
+	void Update()
+	{
+		if (somethingHappened)
+		{
+			XInput.StopAllVibrations();
+		}
+	}
+}
+```
+</details>
+
+<details>
+<summary>Stop the vibration for a specific controller</summary>
+
+```csharp
+public class ExampleScript : MonoBehaviour
+{
+	void Update()
+	{
+		if (somethingHappened)
+		{
+			// Stop vibration for Player 1.
+			XInput.StopVibration();
+		}
+	}
+}
+```
+</details>
+
+<details>
+<summary>Stop the vibration for a specific controller and specific trigger</summary>
+
+```csharp
+public class ExampleScript : MonoBehaviour
+{
+	void Update()
+	{
+		if (somethingHappened)
+		{
+			// Stop vibration for Player 1 Left Trigger.
+			XInput.StopVibration(XInput.Trigger.Left);
+		}
+	}
+}
+```
+</details>
+
+## Best Code Usage
+
+Actually, you can get information from the controllers in 2 ways :
+- The first, simpler, is to call the methods directly. That's what the examples above show, for the sake of simplicity.
 
 ```csharp
 public class ButtonScript : MonoBehaviour
 {
 	void Update()
 	{
-		if (X360.IsButtonPressed(X360.Button.A)) // Player 1 just pressed A this frame
+		if (XInput.ButtonPressed(XInput.Button.A)) // Player 1 just pressed A this frame
 		{
 			// Do stuff for player 1
-		}
-
-		if (X360.IsButtonHold(X360.Button.A, 1)) // Player 2 is holding the A button
-		{
-			// Do stuff for player 2 (playerIndex = 1)
 		}
 	}
 }
@@ -48,12 +458,12 @@ public class ButtonScript : MonoBehaviour
 {
 	void Start()
 	{
-		X360.onButtonPressed += OnButtonPressed; // We listen to the OnButtonPressed event
+		XInput.onButtonPressed += OnButtonPressed; // We listen to the OnButtonPressed event
 	}
 
-	void OnButtonPressed(X360.Button button, int playerIndex)
+	void OnButtonPressed(XInput.Button button, int playerIndex)
 	{
-		if (button == X360.Button.A && playerIndex == 0) // Player 1 pressed the A button
+		if (button == XInput.Button.A && playerIndex == 0) // Player 1 just pressed A
 		{
 			// Do stuff
 		}
@@ -61,12 +471,54 @@ public class ButtonScript : MonoBehaviour
 
 	void OnDestroy()
 	{
-		X360.onButtonPressed -= OnButtonPressed; // We don't need to listen to the event anymore
+		XInput.onButtonPressed -= OnButtonPressed; // We don't need to listen to the event anymore
 	}
 }
 ```
 
-## Screenshots
+Here is the list of events you can register in this way:
+
+<details>
+<summary>Controller events</summary>
+	
++ OnControllerConnected
++ OnControllerDisconnected
+
+</details>
+
+<details>
+<summary>Button events</summary>
+	
++ OnButtonPressed
++ OnButtonReleased
+
+</details>
+
+<details>
+<summary>Stick events</summary>
+	
++ OnStickDirectionChanged
++ OnStickReleased
+
+</details>
+
+<details>
+<summary>Trigger events</summary>
+	
++ OnTriggerPressed
++ OnTriggerReleased
+
+</details>
+
+<details>
+<summary>DPad events</summary>
+	
++ OnDPadDirectionChanged
++ OnDPadReleased
+
+</details>
+
+## Demo Scene
 
 The screenshot below was taken from the Demo Scene, included in the plugin. You can plug in multiple controllers and see their model update when you press buttons!
 
@@ -75,6 +527,7 @@ The screenshot below was taken from the Demo Scene, included in the plugin. You 
 ## Notes
 
 * Last tested with [Unity 2018.3.8f1](https://unity3d.com/unity/whats-new/2018.3.8).
+* XInput uses a radial method for its deadzone. See [this](http://www.third-helix.com/2013/04/12/doing-thumbstick-dead-zones-right.html) fantastic article to read more about the different deadzone methods.
 
 ## Authors
 

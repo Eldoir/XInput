@@ -4,8 +4,10 @@ using UnityEngine.UI;
 public class GuideScript : InputScript
 {
 
+    #pragma warning disable 0649
     [SerializeField]
     private Image[] images;
+    #pragma warning restore 0649
 
 
     protected override void InputReset()

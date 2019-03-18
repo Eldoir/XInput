@@ -4,13 +4,15 @@ using UnityEngine.UI;
 public class DPadScript : InputScript
 {
 
+    #pragma warning disable 0649
     [SerializeField]
     private DPadDirection[] dPadDirections;
+    #pragma warning restore 0649
 
 
     protected override void InputUpdate()
     {
-        X360.Direction direction = X360.GetDpadDirection(playerIndex);
+        XInput.Direction direction = XInput.GetDPadDirection(playerIndex);
 
         foreach (DPadDirection dPadDirection in dPadDirections)
         {
@@ -31,14 +33,16 @@ public class DPadScript : InputScript
     [System.Serializable]
     public class DPadDirection
     {
+        #pragma warning disable 0649
         [SerializeField]
-        private X360.Direction direction;
+        private XInput.Direction direction;
 
         [SerializeField]
         private Image imgComponent;
+        #pragma warning restore 0649
 
 
-        public bool IsConcerned(X360.Direction direction)
+        public bool IsConcerned(XInput.Direction direction)
         {
             return this.direction == direction;
         }

@@ -4,8 +4,9 @@ using UnityEngine.UI;
 public class ButtonScript : InputScript
 {
 
+    #pragma warning disable 0649
     [SerializeField]
-    private X360.Button button;
+    private XInput.Button button;
 
     [SerializeField]
     private Image imgComponent;
@@ -15,17 +16,18 @@ public class ButtonScript : InputScript
 
     [SerializeField]
     private Sprite pressedSprite;
+    #pragma warning restore 0649
 
 
     protected override void InputStart()
     {
         base.InputStart();
 
-        X360.onButtonPressed += OnButtonPressed; // We listen to the event
-        X360.onButtonReleased += OnButtonReleased;
+        XInput.OnButtonPressed += OnButtonPressed; // We listen to the event
+        XInput.OnButtonReleased += OnButtonReleased;
     }
 
-    void OnButtonPressed(X360.Button button, int playerIndex)
+    void OnButtonPressed(XInput.Button button, int playerIndex)
     {
         if (this.button == button && this.playerIndex == playerIndex)
         {
@@ -33,7 +35,7 @@ public class ButtonScript : InputScript
         }
     }
 
-    void OnButtonReleased(X360.Button button, int playerIndex)
+    void OnButtonReleased(XInput.Button button, int playerIndex)
     {
         if (this.button == button && this.playerIndex == playerIndex)
         {
@@ -48,7 +50,7 @@ public class ButtonScript : InputScript
 
     private void OnDestroy()
     {
-        X360.onButtonPressed -= OnButtonPressed; // We're about to be destroyed, we don't need to listen to the event anymore
-        X360.onButtonReleased -= OnButtonReleased;
+        XInput.OnButtonPressed -= OnButtonPressed; // We're about to be destroyed, we don't need to listen to the event anymore
+        XInput.OnButtonReleased -= OnButtonReleased;
     }
 }

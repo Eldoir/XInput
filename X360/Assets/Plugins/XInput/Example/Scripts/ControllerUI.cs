@@ -5,6 +5,7 @@ using UnityEngine.UI;
 public class ControllerUI : MonoBehaviour
 {
 
+    #pragma warning disable 0649
     [SerializeField]
     private Image indexImg;
 
@@ -16,6 +17,7 @@ public class ControllerUI : MonoBehaviour
 
     [SerializeField]
     private Color disconnectedColor;
+    #pragma warning restore 0649
 
 
     private int index;

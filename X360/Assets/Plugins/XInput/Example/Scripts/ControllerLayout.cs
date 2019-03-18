@@ -4,8 +4,10 @@ public class ControllerLayout : MonoBehaviour
 {
     public enum Corner { TopLeft, TopRight, BottomLeft, BottomRight }
 
+    #pragma warning disable 0649
     [SerializeField]
     private GameObject controllerPrefab;
+    #pragma warning restore 0649
 
     private GameObject[] controllers;
     private RectTransform[] rects;
@@ -25,8 +27,8 @@ public class ControllerLayout : MonoBehaviour
 
         UpdateControllersPosition();
 
-        X360.onControllerConnected += OnControllerConnected;
-        X360.onControllerDisconnected += OnControllerDisconnected;
+        XInput.OnControllerConnected += OnControllerConnected;
+        XInput.OnControllerDisconnected += OnControllerDisconnected;
     }
 
     private void Update()

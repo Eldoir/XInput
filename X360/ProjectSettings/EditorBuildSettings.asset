@@ -6,6 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Plugins/X360/Example/Scenes/ExampleScene.unity
+    path: Assets/Plugins/XInput/Example/Scenes/ExampleScene.unity
     guid: 02712365a4f368e47b28974fe9fba04c
   m_configObjects: {}

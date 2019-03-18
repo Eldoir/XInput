@@ -4,17 +4,19 @@ using UnityEngine.UI;
 public class StickScript : InputScript
 {
 
+    #pragma warning disable 0649
     [SerializeField]
     private RectTransform rectTransform;
 
     [SerializeField]
-    private X360.Stick stick;
+    private XInput.Stick stick;
 
     [SerializeField]
-    private X360.Button button;
+    private XInput.Button button;
 
     [SerializeField]
     private Image pressedImg;
+    #pragma warning restore 0649
 
 
     private Vector2 originalPosition;
@@ -28,9 +30,9 @@ public class StickScript : InputScript
 
     protected override void InputUpdate()
     {
-        rectTransform.anchoredPosition = originalPosition + amplitude * X360.GetStickDirection(stick, playerIndex);
+        rectTransform.anchoredPosition = originalPosition + amplitude * XInput.GetStickDirection(stick, playerIndex);
 
-        pressedImg.enabled = X360.IsButtonHold(button, playerIndex);
+        pressedImg.enabled = XInput.ButtonHold(button, playerIndex);
     }
 
     protected override void InputReset()
