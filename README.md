@@ -20,7 +20,9 @@ To get it working, just go into GameObject -> Input -> XInput. It will create a 
 
 Here are some examples of what you can do with XInput:
 
-### Controllers
+<details>
+<summary><strong>Controllers</strong></summary>
+<br/>
 
 <details>
 <summary>Know if a controller is connected</summary>
@@ -76,7 +78,11 @@ public class ExampleScript : MonoBehaviour
 ```
 </details>
 
-### Buttons
+</details>
+
+<details>
+<summary><strong>Buttons</strong></summary>
+<br/>
 
 <details>
 <summary>Know if a button is being hold</summary>
@@ -132,7 +138,11 @@ public class ExampleScript : MonoBehaviour
 ```
 </details>
 
-### Sticks
+</details>
+
+<details>
+<summary><strong>Sticks</strong></summary>
+<br/>
 
 <details>
 <summary>Get the direction of a stick</summary>
@@ -218,7 +228,11 @@ public class ExampleScript : MonoBehaviour
 ```
 </details>
 
-### Triggers
+</details>
+
+<details>
+<summary><strong>Triggers</strong></summary>
+<br/>
 
 <details>
 <summary>Get the value of a trigger (between [0-1])</summary>
@@ -286,7 +300,11 @@ public class ExampleScript : MonoBehaviour
 ```
 </details>
 
-### DPad
+</details>
+
+<details>
+<summary><strong>DPad</strong></summary>
+<br/>
 
 <details>
 <summary>Get the DPad direction</summary>
@@ -342,7 +360,11 @@ public class ExampleScript : MonoBehaviour
 ```
 </details>
 
-### Vibration
+</details>
+
+<details>
+<summary><strong>Vibration</strong></summary>
+<br/>
 
 <details>
 <summary>Set a vibration on both triggers</summary>
@@ -431,6 +453,8 @@ public class ExampleScript : MonoBehaviour
 	}
 }
 ```
+</details>
+
 </details>
 
 ## Best Code Usage
