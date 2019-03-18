@@ -258,7 +258,7 @@ public class ExampleScript : MonoBehaviour
 	void Update()
 	{
 		// Player 1 just pressed her Left Trigger this frame
-		if (XInput.IsTriggerPressed(XInput.Trigger.Left))
+		if (XInput.TriggerPressed(XInput.Trigger.Left))
 		{
 
 		}
@@ -276,7 +276,7 @@ public class ExampleScript : MonoBehaviour
 	void Update()
 	{
 		// Player 1 just released her Left Trigger this frame
-		if (XInput.IsTriggerReleased(XInput.Trigger.Left))
+		if (XInput.TriggerReleased(XInput.Trigger.Left))
 		{
 
 		}
