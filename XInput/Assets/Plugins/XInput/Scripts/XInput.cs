@@ -163,7 +163,7 @@ public class XInput : MonoBehaviour
 
             if (!controllers[i].IsConnected())
             {
-                continue; // The controller isn't connected, so We don't need to go further to fire input events
+                continue; // The controller isn't connected, so we don't need to go further to fire input events
             }
 
             #region Handling Button Events
