@@ -2,23 +2,23 @@
 
 You are using **Unity3D** and you wonder how to handle **Xbox 360** and **Xbox One** controllers very easily? Well, there you go!
 
-XInput gets rid of all the complicated code so that you can focus on the essentials: interaction!
+**_XInput_** gets rid of all the complicated code so that you can focus on the essentials: interaction!
 
-See [Examples](#examples) to find out what XInput is capable of.
+See [Examples](#examples) to find out what **_XInput_** is capable of.
 
 ## Getting Started
 
 For a quick import into an existing project, just get the [UnityPackage](XInputPackage.unitypackage).
 
-If you want to test the UnityPackage in an empty project, that's what the XInput folder is! :)
+If you want to test the UnityPackage in an empty project, that's what the **_XInput_** folder is! :)
 
-To get it working, just go into GameObject -> Input -> XInput. It will create a new GameObject in your scene, named "XInput" and with the XInput script on it. You're good to go!
+To get it working, just go into GameObject -> Input -> **_XInput_**. It will create a new GameObject in your scene, named "**_XInput_**" and with the **_XInput_** script on it. You're good to go!
 
 ![How to](Screenshots/HowTo.png)
 
 ## Examples
 
-Here are some examples of what you can do with XInput:
+Here are some examples of what you can do with **_XInput_**:
 
 <details>
 <summary><strong>Controllers</strong></summary>
@@ -551,7 +551,7 @@ The screenshot below was taken from the Demo Scene, included in the plugin. You 
 ## Notes
 
 * Last tested with [Unity 2018.3.9f1](https://unity3d.com/unity/whats-new/2018.3.9), from 18 March 2019.
-* XInput uses a radial method for its deadzone. See [this](http://www.third-helix.com/2013/04/12/doing-thumbstick-dead-zones-right.html) fantastic article to read more about the different deadzone methods.
+* **_XInput_** uses a radial method for its deadzone. See [this](http://www.third-helix.com/2013/04/12/doing-thumbstick-dead-zones-right.html) fantastic article to read more about the different deadzone methods.
 
 ## Authors
 
