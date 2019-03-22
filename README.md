@@ -1,6 +1,6 @@
 # XInput
 
-Ever wondered how to handle **Xbox 360** and **Xbox One** controllers very easily? Well, there you go!
+You are using **Unity3D** and you wonder how to handle **Xbox 360** and **Xbox One** controllers very easily? Well, there you go!
 
 XInput gets rid of all the complicated code so that you can focus on the essentials: interaction!
 
