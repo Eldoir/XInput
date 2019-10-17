@@ -363,6 +363,16 @@ public class XInput : MonoBehaviour
     }
 
     /// <summary>
+    /// <para>Returns true if the trigger is being hold this frame.</para>
+    /// <para>Uses a default specific value to determine if the trigger is being hold.</para>
+    /// <para>You can call <see cref="SetTriggerMinValueToConsiderPressedOrReleased(float)"/> if you want to redefine that value.</para>
+    /// </summary>
+    public static bool TriggerHold(Trigger trigger, int playerIndex = 0)
+    {
+        return controllers[playerIndex].TriggerHold(trigger);
+    }
+
+    /// <summary>
     /// <para>Returns true if the trigger was just pressed this frame.</para>
     /// <para>Uses a default specific value to determine if the trigger was pressed.</para>
     /// <para>You can call <see cref="SetTriggerMinValueToConsiderPressedOrReleased(float)"/> if you want to redefine that value.</para>

@@ -237,6 +237,20 @@ namespace XInputInternal
             return 0f;
         }
 
+        public bool TriggerHold(XInput.Trigger trigger)
+        {
+            if (trigger == XInput.Trigger.Left)
+            {
+                return state.Triggers.Left >= triggerMinValueToConsiderPressedOrReleased && prevState.Triggers.Left >= triggerMinValueToConsiderPressedOrReleased;
+            }
+            else if (trigger == XInput.Trigger.Right)
+            {
+                return state.Triggers.Right >= triggerMinValueToConsiderPressedOrReleased && prevState.Triggers.Right >= triggerMinValueToConsiderPressedOrReleased;
+            }
+
+            return false;
+        }
+
         public bool TriggerPressed(XInput.Trigger trigger)
         {
             if (trigger == XInput.Trigger.Left)

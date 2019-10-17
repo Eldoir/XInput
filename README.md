@@ -250,6 +250,24 @@ public class ExampleScript : MonoBehaviour
 </details>
 
 <details>
+<summary>Know if a trigger is being hold</summary>
+
+```csharp
+public class ExampleScript : MonoBehaviour
+{
+	void Update()
+	{
+		// Player 1 is holding her Left Trigger
+		if (XInput.TriggerHold(XInput.Trigger.Left))
+		{
+
+		}
+	}
+}
+```
+</details>
+
+<details>
 <summary>Know if a trigger was pressed</summary>
 
 ```csharp
