@@ -569,7 +569,7 @@ The screenshot below was taken from the Demo Scene, included in the plugin. You 
 ## Notes
 
 * Last tested with [Unity 2018.4.11f1](https://unity3d.com/unity/whats-new/2018.4.11), from 11 October 2019.
-* **_XINPUT_** only works for Windows! No Mac, Web or Mobile supported.
+* **_XInput_** only works for Windows! No Mac, Web or Mobile supported.
 * **_XInput_** uses a radial method for its deadzone. See [this](http://www.third-helix.com/2013/04/12/doing-thumbstick-dead-zones-right.html) fantastic article to read more about the different deadzone methods.
 
 ## Authors
